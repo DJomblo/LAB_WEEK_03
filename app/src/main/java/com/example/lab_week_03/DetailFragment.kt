@@ -13,6 +13,7 @@ private const val ARG_PARAM2 = "param2"
 class DetailFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
+
     private val coffeeTitle: TextView?
         get() = view?.findViewById(R.id.coffee_title)
     private val coffeeDesc: TextView?
@@ -33,8 +34,14 @@ class DetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
-    fun setCoffeeData(id: Int){
-        when(id){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val coffeeId = arguments?.getInt(COFFEE_ID, 0) ?: 0
+        setCoffeeData(coffeeId)
+    }
+
+    fun setCoffeeData(id: Int) {
+        when (id) {
             R.id.affogato -> {
                 coffeeTitle?.text = getString(R.string.affogato_title)
                 coffeeDesc?.text = getString(R.string.affogato_desc)
@@ -51,6 +58,13 @@ class DetailFragment : Fragment() {
     }
 
     companion object {
-        // keep your old companion object code
+        private const val COFFEE_ID = "COFFEE_ID"
+
+        fun newInstance(coffeeId: Int) =
+            DetailFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(COFFEE_ID, coffeeId)
+                }
+            }
     }
 }
